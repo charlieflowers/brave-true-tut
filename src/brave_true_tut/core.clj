@@ -80,3 +80,17 @@
       (if (> accumulated-size target)
         x
         (recur xs (+ accumulated-size (:size x)))))))
+
+(defn hit-reduce
+  [asym-body-parts]
+  (let [sym-parts (charlie asym-body-parts)
+        size-sum (reduce + 0 (map :size sym-parts))
+        target (inc (rand size-sum))]
+    (reduce (fn [accsize part]
+              (if (:size accsize)
+                accsize
+                (let [newsize (+ accsize (:size part))]
+                  (if (> newsize target)
+                    part
+                    newsize)))
+              ) 0 sym-parts)))
