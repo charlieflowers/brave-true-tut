@@ -67,3 +67,16 @@
                 (conj ys (matching-part x))
                 ys)))]
     (reduce f [] asym-body-parts)))
+
+;; Sweet! I got same thing author did, except he put f inline.
+
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (charlie asym-body-parts)
+        size-sum (reduce + 0 (map :size sym-parts))
+        target (inc (rand size-sum))]
+    (loop [[x & xs] sym-parts
+           accumulated-size (:size x)]
+      (if (> accumulated-size target)
+        x
+        (recur xs (+ accumulated-size (:size x)))))))
